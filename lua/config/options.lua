@@ -31,3 +31,6 @@ vim.opt.laststatus = 2
 vim.opt.showtabline = 1
 vim.opt.cmdheight = 0
 vim.opt.updatetime = 50
+
+-- Disable command-line completion menu
+vim.opt.wildmenu = false
