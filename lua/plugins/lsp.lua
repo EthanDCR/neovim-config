@@ -29,11 +29,9 @@ return {
         automatic_installation = false,
       })
 
-      local lspconfig = require("lspconfig")
-
       -- Get default capabilities with error handling
-      local ok, cmp_nvim_lsp = pcall(require, "cmp_nvim_lsp")
       local capabilities = vim.lsp.protocol.make_client_capabilities()
+      local ok, cmp_nvim_lsp = pcall(require, "cmp_nvim_lsp")
       if ok then
         capabilities = cmp_nvim_lsp.default_capabilities(capabilities)
       end
@@ -64,45 +62,67 @@ return {
         end
       end
 
-      -- Setup language servers
-      local servers = {
-        html = {
-          filetypes = { "html" },
-          init_options = {
-            configurationSection = { "html", "css", "javascript" },
-            embeddedLanguages = {
-              css = true,
-              javascript = true
+      -- Setup language servers using modern vim.lsp.config
+      vim.lsp.config("html", {
+        cmd = { "vscode-html-language-server", "--stdio" },
+        filetypes = { "html" },
+        capabilities = capabilities,
+        on_attach = on_attach,
+        init_options = {
+          configurationSection = { "html", "css", "javascript" },
+          embeddedLanguages = {
+            css = true,
+            javascript = true
+          },
+          provideFormatter = true
+        }
+      })
+
+      vim.lsp.config("cssls", {
+        cmd = { "vscode-css-language-server", "--stdio" },
+        filetypes = { "css", "scss", "less" },
+        capabilities = capabilities,
+        on_attach = on_attach,
+      })
+
+      vim.lsp.config("ts_ls", {
+        cmd = { "typescript-language-server", "--stdio" },
+        filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact" },
+        capabilities = capabilities,
+        on_attach = on_attach,
+      })
+
+      vim.lsp.config("tailwindcss", {
+        cmd = { "tailwindcss-language-server", "--stdio" },
+        filetypes = { "html", "css", "scss", "javascript", "javascriptreact", "typescript", "typescriptreact" },
+        capabilities = capabilities,
+        on_attach = on_attach,
+      })
+
+      vim.lsp.config("lua_ls", {
+        cmd = { "lua-language-server" },
+        filetypes = { "lua" },
+        capabilities = capabilities,
+        on_attach = on_attach,
+        settings = {
+          Lua = {
+            runtime = { version = "LuaJIT" },
+            diagnostics = { globals = { "vim" } },
+            workspace = {
+              library = vim.api.nvim_get_runtime_file("", true),
+              checkThirdParty = false,
             },
-            provideFormatter = true
-          }
-        },
-        cssls = {},
-        ts_ls = {
-          filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact" }
-        },
-        tailwindcss = {},
-        lua_ls = {
-          settings = {
-            Lua = {
-              runtime = { version = "LuaJIT" },
-              diagnostics = { globals = { "vim" } },
-              workspace = {
-                library = vim.api.nvim_get_runtime_file("", true),
-                checkThirdParty = false,
-              },
-              telemetry = { enable = false },
-            },
+            telemetry = { enable = false },
           },
         },
-        jsonls = {},
-      }
+      })
 
-      for server, config in pairs(servers) do
-        config.capabilities = capabilities
-        config.on_attach = on_attach
-        lspconfig[server].setup(config)
-      end
+      vim.lsp.config("jsonls", {
+        cmd = { "vscode-json-language-server", "--stdio" },
+        filetypes = { "json", "jsonc" },
+        capabilities = capabilities,
+        on_attach = on_attach,
+      })
     end,
   },
 }

@@ -24,8 +24,10 @@ return {
   -- Completion
   {
     "hrsh7th/nvim-cmp",
-    event = "InsertEnter",
+    enabled = true,
+    event = { "InsertEnter", "CmdlineEnter" },
     dependencies = {
+      "neovim/nvim-lspconfig",
       "hrsh7th/cmp-nvim-lsp",
       "hrsh7th/cmp-buffer",
       "hrsh7th/cmp-path",
@@ -43,6 +45,16 @@ return {
         return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
       end
 
+      -- Set up LSP completion manually with omnifunc
+      vim.api.nvim_create_autocmd("LspAttach", {
+        callback = function(args)
+          local client = vim.lsp.get_client_by_id(args.data.client_id)
+          if client and client.supports_method("textDocument/completion") then
+            vim.bo[args.buf].omnifunc = "v:lua.vim.lsp.omnifunc"
+          end
+        end,
+      })
+
       cmp.setup({
         snippet = {
           expand = function(args)
@@ -52,6 +64,22 @@ return {
         window = {
           completion = cmp.config.window.bordered(),
           documentation = cmp.config.window.bordered(),
+        },
+        completion = {
+          completeopt = "menu,menuone,noinsert",
+        },
+        experimental = {
+          ghost_text = {
+            hl_group = "CmpGhostText",
+          },
+        },
+        performance = {
+          debounce = 60,
+          throttle = 30,
+          fetching_timeout = 500,
+          confirm_resolve_timeout = 80,
+          async_budget = 1,
+          max_view_entries = 200,
         },
         mapping = cmp.mapping.preset.insert({
           ["<C-b>"] = cmp.mapping.scroll_docs(-4),
@@ -84,6 +112,7 @@ return {
           end, { "i", "s" }),
         }),
         sources = cmp.config.sources({
+          { name = "nvim_lsp", priority = 1000 },
           { name = "luasnip", priority = 750 },
           { name = "buffer", priority = 500 },
           { name = "path", priority = 250 },
