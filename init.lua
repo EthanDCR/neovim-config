@@ -1,7 +1,4 @@
--- bootstrap lazy.nvim, LazyVim and your plugins
-
+-- Load configuration modules
+require("config.options")
 require("config.lazy")
 require("config.keymaps")
-require("config.options")
-
-vim.keymap.set("t", "<Esc>", [[<C-\><C-n>]], { noremap = true })

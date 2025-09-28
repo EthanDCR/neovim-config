@@ -1,18 +1,19 @@
--- Keymaps are automatically loaded on the VeryLazy event
--- Default keymaps that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/keymaps.lua
--- Add any additional keymaps here
+-- Terminal keybindings
+vim.keymap.set("t", "<Esc>", [[<C-\><C-n>]], { noremap = true })
+vim.keymap.set("t", "<Space>", [[<C-\><C-n>]], { noremap = true })
 
--- Set leader + e to open netrw (file explorer)
-vim.api.nvim_set_keymap("n", "<Leader>e", ":Explore<CR>", { noremap = true, silent = true })
+-- Telescope
+vim.keymap.set("n", "<leader><leader>", function()
+  require("telescope.builtin").find_files()
+end, { desc = "Find files" })
 
--- Optional: Unmap space + e to prevent conflict (if needed)
-vim.api.nvim_del_keymap("n", "<Space>e")
+vim.keymap.set("n", "<leader>g", function()
+  require("telescope.builtin").live_grep()
+end, { desc = "Live grep" })
 
--- Set Enter + e to open netrw (file explorer)
-vim.api.nvim_set_keymap("n", "<CR>e", ":Explore<CR>", { noremap = true, silent = true })
+-- File tree
+vim.keymap.set("n", "<CR>e", ":NvimTreeToggle<CR>", { desc = "Toggle file tree" })
 
--- Set leader + e to toggle netrw (file explorer)
-vim.api.nvim_set_keymap("n", "<Leader>e", ":Lexplore<CR>", { noremap = true, silent = true })
-
--- Optional: Unmap space + e to prevent conflict (if needed)
-vim.api.nvim_del_keymap("n", "<Space>e")
+-- Buffer navigation
+vim.keymap.set("n", "<S-l>", ":bnext<CR>", { desc = "Next buffer" })
+vim.keymap.set("n", "<S-h>", ":bprevious<CR>", { desc = "Previous buffer" })

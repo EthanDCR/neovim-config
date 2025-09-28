@@ -1,8 +1,33 @@
--- Options are automatically loaded before lazy.nvim startup
--- Default options that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/options.lua
--- Add any additional options here
---
---
+-- Leader keys
+vim.g.mapleader = " "
+vim.g.maplocalleader = " "
 
--- Set leader key to space
-vim.g.mapleader = " " -- Space bar as leader key
+-- Cursor always in block mode
+vim.opt.guicursor = ""
+
+-- Line numbers
+vim.opt.number = true
+vim.opt.relativenumber = true
+
+-- Indentation
+vim.opt.tabstop = 2
+vim.opt.shiftwidth = 2
+vim.opt.expandtab = true
+vim.opt.smartindent = true
+
+-- Search
+vim.opt.hlsearch = false
+vim.opt.incsearch = true
+vim.opt.ignorecase = true
+vim.opt.smartcase = true
+
+-- UI
+vim.opt.wrap = false
+vim.opt.termguicolors = true
+vim.opt.scrolloff = 8
+vim.opt.background = "dark"
+vim.opt.signcolumn = "no"
+vim.opt.laststatus = 2
+vim.opt.showtabline = 1
+vim.opt.cmdheight = 0
+vim.opt.updatetime = 50
