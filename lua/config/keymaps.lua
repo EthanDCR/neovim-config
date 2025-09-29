@@ -1,6 +1,5 @@
 -- Terminal keybindings
 vim.keymap.set("t", "<Esc>", [[<C-\><C-n>]], { noremap = true })
-vim.keymap.set("t", "<Space>", [[<C-\><C-n>]], { noremap = true })
 
 -- Telescope
 vim.keymap.set("n", "<leader><leader>", function()

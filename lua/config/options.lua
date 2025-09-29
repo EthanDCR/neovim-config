@@ -34,3 +34,6 @@ vim.opt.updatetime = 50
 
 -- Disable command-line completion menu
 vim.opt.wildmenu = false
+
+-- Clipboard integration
+vim.opt.clipboard = "unnamedplus"

@@ -26,7 +26,7 @@ return {
           "lua_ls",
           "jsonls",
         },
-        automatic_installation = false,
+        automatic_installation = true,
       })
 
       -- Get default capabilities with error handling
@@ -62,20 +62,12 @@ return {
         end
       end
 
-      -- Setup language servers using modern vim.lsp.config
+      -- Setup language servers using vim.lsp.config
       vim.lsp.config("html", {
         cmd = { "vscode-html-language-server", "--stdio" },
         filetypes = { "html" },
         capabilities = capabilities,
         on_attach = on_attach,
-        init_options = {
-          configurationSection = { "html", "css", "javascript" },
-          embeddedLanguages = {
-            css = true,
-            javascript = true
-          },
-          provideFormatter = true
-        }
       })
 
       vim.lsp.config("cssls", {
@@ -94,9 +86,33 @@ return {
 
       vim.lsp.config("tailwindcss", {
         cmd = { "tailwindcss-language-server", "--stdio" },
-        filetypes = { "html", "css", "scss", "javascript", "javascriptreact", "typescript", "typescriptreact" },
+        filetypes = { "html", "css", "scss", "javascript", "javascriptreact", "typescript", "typescriptreact", "vue", "svelte" },
         capabilities = capabilities,
         on_attach = on_attach,
+        settings = {
+          tailwindCSS = {
+            classAttributes = { "class", "className", "class:list", "classList", "ngClass" },
+            lint = {
+              cssConflict = "warning",
+              invalidApply = "error",
+              invalidConfigPath = "error",
+              invalidScreen = "error",
+              invalidTailwindDirective = "error",
+              invalidVariant = "error",
+              recommendedVariantOrder = "warning"
+            },
+            experimental = {
+              classRegex = {
+                "tw`([^`]*)",
+                "tw=\"([^\"]*)",
+                "tw={\"([^\"}]*)",
+                "tw\\.\\w+`([^`]*)",
+                "tw\\(.*?\\)`([^`]*)"
+              },
+            },
+            validate = true,
+          }
+        },
       })
 
       vim.lsp.config("lua_ls", {
@@ -123,6 +139,9 @@ return {
         capabilities = capabilities,
         on_attach = on_attach,
       })
+
+      -- Enable all configured LSP servers
+      vim.lsp.enable({ "html", "cssls", "ts_ls", "tailwindcss", "lua_ls", "jsonls" })
     end,
   },
 }
