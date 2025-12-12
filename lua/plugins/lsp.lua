@@ -25,6 +25,8 @@ return {
           "tailwindcss",
           "lua_ls",
           "jsonls",
+          "clangd",
+          "gopls",
         },
         automatic_installation = true,
       })
@@ -66,6 +68,7 @@ return {
       vim.lsp.config("html", {
         cmd = { "vscode-html-language-server", "--stdio" },
         filetypes = { "html" },
+        root_markers = { ".git" },
         capabilities = capabilities,
         on_attach = on_attach,
       })
@@ -73,6 +76,7 @@ return {
       vim.lsp.config("cssls", {
         cmd = { "vscode-css-language-server", "--stdio" },
         filetypes = { "css", "scss", "less" },
+        root_markers = { ".git" },
         capabilities = capabilities,
         on_attach = on_attach,
       })
@@ -80,6 +84,7 @@ return {
       vim.lsp.config("ts_ls", {
         cmd = { "typescript-language-server", "--stdio" },
         filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact" },
+        root_markers = { "package.json", ".git" },
         capabilities = capabilities,
         on_attach = on_attach,
       })
@@ -87,6 +92,7 @@ return {
       vim.lsp.config("tailwindcss", {
         cmd = { "tailwindcss-language-server", "--stdio" },
         filetypes = { "html", "css", "scss", "javascript", "javascriptreact", "typescript", "typescriptreact", "vue", "svelte" },
+        root_markers = { "tailwind.config.js", ".git" },
         capabilities = capabilities,
         on_attach = on_attach,
         settings = {
@@ -118,6 +124,7 @@ return {
       vim.lsp.config("lua_ls", {
         cmd = { "lua-language-server" },
         filetypes = { "lua" },
+        root_markers = { ".git" },
         capabilities = capabilities,
         on_attach = on_attach,
         settings = {
@@ -136,12 +143,50 @@ return {
       vim.lsp.config("jsonls", {
         cmd = { "vscode-json-language-server", "--stdio" },
         filetypes = { "json", "jsonc" },
+        root_markers = { ".git" },
         capabilities = capabilities,
         on_attach = on_attach,
       })
 
+      vim.lsp.config("clangd", {
+        cmd = { "clangd" },
+        filetypes = { "c", "cpp", "objc", "objcpp" },
+        root_markers = { ".git" },
+        capabilities = capabilities,
+        on_attach = on_attach,
+      })
+
+      vim.lsp.config("gopls", {
+        cmd = { vim.fn.expand("$HOME/go/bin/gopls") },
+        filetypes = { "go", "gomod", "gowork", "gotmpl" },
+        root_markers = { "go.mod", ".git" },
+        capabilities = capabilities,
+        on_attach = on_attach,
+        settings = {
+          gopls = {
+            analyses = {
+              unusedparams = true,
+              shadow = true,
+            },
+            staticcheck = true,
+            gofumpt = true,
+            completeUnimported = true,
+            usePlaceholders = true,
+            hints = {
+              assignVariableTypes = true,
+              compositeLiteralFields = true,
+              compositeLiteralTypes = true,
+              constantValues = true,
+              functionTypeParameters = true,
+              parameterNames = true,
+              rangeVariableTypes = true,
+            },
+          },
+        },
+      })
+
       -- Enable all configured LSP servers
-      vim.lsp.enable({ "html", "cssls", "ts_ls", "tailwindcss", "lua_ls", "jsonls" })
+      vim.lsp.enable({ "html", "cssls", "ts_ls", "tailwindcss", "lua_ls", "jsonls", "clangd", "gopls" })
     end,
   },
 }

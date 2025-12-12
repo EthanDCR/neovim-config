@@ -17,6 +17,18 @@ return {
           tab_size = 5,
           transparent = true,
         },
+        highlights = {
+          buffer_selected = {
+            bold = true,
+            italic = false,
+            fg = "#ffffff",
+            bg = "#3e4451",
+          },
+          indicator_selected = {
+            fg = "#61afef",
+            bg = "#3e4451",
+          },
+        },
       })
     end,
   },
